@@ -16,8 +16,9 @@ A Node.js script that automates message sending to Instagram inboxes or groups. 
 ## 🚀 Installation
 1. Clone repository:
    ```bash
-      git clone https://github.com/yourusername/instagram-bot.git
-      cd instagram-bot
+      git clone https://github.com/hzcv/Insta_bot_using_node.git
+      
+      cd Insta_bot_using_node
 
 2. Install dependencies:
    ```bash
