@@ -2,6 +2,9 @@
   "name": "instagram-bot",
   "version": "1.0.0",
   "main": "bot.js",
+  "engines": {
+    "node": ">=18.0.0"  // Add your Node.js version here
+  },
   "dependencies": {
     "instagram-private-api": "^1.45.3",
     "readline-sync": "^1.4.10"
