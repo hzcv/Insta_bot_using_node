@@ -4,9 +4,19 @@ const readline = require('readline-sync');
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function instagramLogin(username, password) {
-    const client = new IgApiClient();
+    // Generate iPhone device configuration
     client.state.generateDevice(username);
+    // Override with iPhone parameters
+    client.state.device = {
+        ...client.state.device,
+        userAgent: 'Instagram 277.0.0.19.286 iOS (15_6_1; iPhone13,2; en_US; en-US; scale=3.00; 1170x2532; 386531449)',
+        deviceString: 'iOS 16_6', 
+        deviceModel: 'iPhone14,2',
+        phoneManufacturer: 'Apple',
+        deviceType: 'iOS-16.6-iPhone14,2--465573253',
+        buildNumber: '26.1.0.13.119'
+    };
+
     try {
         await client.account.login(username, password);
         console.log("\nInstagram login successful!\n");
@@ -17,16 +27,17 @@ async function instagramLogin(username, password) {
     }
 }
 
-async function sendInboxMessage(client, targetUsername, messages, haterName, delaySeconds) {
+
+async function sendInboxMessage(client, targetUsername, messages, haterName, delayMs) {
     try {
         const userId = await client.user.getIdByUsername(targetUsername);
         const thread = client.entity.directThread([userId.toString()]);
         while (true) {
             for (const message of messages) {
-                const finalMessage = `${haterName}: ${message}`;
+                const finalMessage = `${haterName} : ${message}`;
                 await thread.broadcastText(finalMessage);
                 console.log(`Message sent: ${finalMessage}`);
-                await delay(delaySeconds * 1000);
+                await delay(delayMs);
             }
         }
     } catch (e) {
@@ -34,15 +45,15 @@ async function sendInboxMessage(client, targetUsername, messages, haterName, del
     }
 }
 
-async function sendGroupMessage(client, threadId, messages, haterName, delaySeconds) {
+async function sendGroupMessage(client, threadId, messages, haterName, delayMs) {
     try {
         const thread = client.entity.directThread(threadId);
         while (true) {
             for (const message of messages) {
-                const finalMessage = `${haterName}: ${message}`;
+                const finalMessage = `${haterName} : ${message}`;
                 await thread.broadcastText(finalMessage);
                 console.log(`Group message sent: ${finalMessage}`);
-                await delay(delaySeconds * 1000);
+                await delay(delayMs);
             }
         }
     } catch (e) {
@@ -59,7 +70,7 @@ async function main() {
     const choice = readline.question("Send to inbox or group? (inbox/group): ").toLowerCase();
     const haterName = readline.question("Enter hater's name: ").trim();
     const msgFilePath = readline.question("Path to message file: ");
-    const delaySeconds = parseInt(readline.question("Delay between messages (seconds): "));
+    const delayMs = parseInt(readline.question("Delay between messages (MILLISECONDS): "));
 
     let messages;
     try {
