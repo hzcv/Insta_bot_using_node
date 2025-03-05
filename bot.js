@@ -39,7 +39,7 @@ async function sendGroupMessage(client, threadId, messages, haterName, delayMs) 
         const thread = client.entity.directThread(threadId);
         while (true) {
             for (const message of messages) {
-                const finalMessage = `${haterName}: ${message}`;
+                const finalMessage = `${haterName} : ${message}`;
                 await thread.broadcastText(finalMessage);
                 console.log(`Group message sent: ${finalMessage}`);
                 await delay(delayMs);
